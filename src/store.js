@@ -37,8 +37,6 @@ export default new Vuex.Store({
       state.sheet.data[col][line].value = '';
     },
     toggleCellSelection(state, { col, line }) {
-      console.log(col, line);
-
       // Need to start to 0 for index
       const x = col - 1;
       const y = line - 1;
@@ -51,8 +49,6 @@ export default new Vuex.Store({
         ...cell,
         selected: !cell.selected,
       });
-
-      console.log('toggleCellSelection', state);
     },
   },
   actions: {
@@ -69,7 +65,6 @@ export default new Vuex.Store({
       context.commit('emptyCell', { col, line });
     },
     toggleCellSelection(context, { col, line }) {
-      console.log('action ', col, line);
       context.commit('toggleCellSelection', { col, line });
     },
   },

@@ -1,11 +1,9 @@
 <template functional>
-  <td
-      @click="listeners.click"
+  <div
       :class="{'selected': props.cell && props.cell.selected}"
   >
-    {{props.cell && props.cell.selected ? 'S' : 'U'}}
     {{ props.cell ? props.cell.value : '' }}
-  </td>
+  </div>
 </template>
 
 <script>
@@ -23,10 +21,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  td {
+  div {
+    width: 100%;
+    height: 100%;
     border: 1px solid black;
     cursor: pointer;
-    width: 80px;
 
     &.selected { background: lightblue; }
   }

@@ -13,11 +13,13 @@
           :key="line"
       >
         <SheetHeaderCell @click="lineClick(line)" :content="line.toString()"/>
-        <SheetCell v-for="col in sheet.x_size"
-                   :cell="getCellAtIndex(col, line)"
-                   :key="line + '-' + col"
-                   @click="onCellClick(col, line)"
-        ></SheetCell>
+        <td
+          v-for="col in sheet.x_size"
+          :key="line + '-' + col"
+          v-dbClick="{ dbclick: onCellDblClick, click: onCellClick, col, line }"
+        >
+          <SheetCell :cell="getCellAtIndex(col, line)"></SheetCell>
+        </td>
 
       </tr>
     </table>
@@ -26,6 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import dbclick from '../directives/DbClick';
 import SheetHeaderCell from './SheetHeaderCell.vue';
 import SheetCell from './SheetCell.vue';
 
@@ -34,6 +37,9 @@ export default {
   components: {
     SheetHeaderCell,
     SheetCell,
+  },
+  directives: {
+    dbClick: dbclick,
   },
   data: () => ({
     sheet: {
@@ -49,6 +55,9 @@ export default {
     onCellClick(col, line) {
       this.$store.dispatch('toggleCellSelection', { col, line });
     },
+    onCellDblClick() {
+      console.log('onCellDblClick');
+    },
     colClick(col) {
       console.log('colClick', col);
       // this.$store.dispatch('', col);
@@ -59,8 +68,12 @@ export default {
     },
   },
 };
+
 </script>
 
 <style scoped lang="scss">
-
+  th, td {
+    width: 80px;
+    height: 25px;
+  }
 </style>
