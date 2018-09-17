@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Sheet :sheet="sheet"/>
+    <Sheet/>
   </div>
 </template>
 
