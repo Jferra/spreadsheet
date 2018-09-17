@@ -14,7 +14,7 @@
       >
         <SheetHeaderCell @click="lineClick(line)" :content="line.toString()"/>
         <SheetCell v-for="col in sheet.x_size"
-                   :cell="getAtCell(line, col)"
+                   :cell="getCellAtIndex(col, line)"
                    :key="line + '-' + col"
                    @click="onCellClick(col, line)"
         ></SheetCell>
@@ -43,25 +43,11 @@ export default {
     },
   }),
   computed: {
-    ...mapGetters(['getAtIndex']),
-    sheetLength() {
-      return this.sheet.x_size * this.sheet.y_size;
-    },
+    ...mapGetters(['getCellAtIndex']),
   },
   methods: {
     onCellClick(col, line) {
-      // Need to start to 0 for index
-      const x = col - 1;
-      const y = line - 1;
-      const index = (y * this.sheet.x_size) + x;
-      const cell = this.sheet.data[index] || {
-        selected: false,
-        value: '',
-      };
-      this.$set(this.sheet.data, index, {
-        ...cell,
-        selected: !cell.selected,
-      });
+      this.$store.dispatch('toggleCellSelection', { col, line });
     },
     colClick(col) {
       console.log('colClick', col);
@@ -70,12 +56,6 @@ export default {
     lineClick(line) {
       console.log('lineClick', line);
       // this.$store.dispatch('', line);
-    },
-    getAtCell(line, col) {
-      const x = col - 1;
-      const y = line - 1;
-      const index = (y * this.sheet.x_size) + x;
-      return this.sheet.data[index];
     },
   },
 };

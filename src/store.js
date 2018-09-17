@@ -12,8 +12,12 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    getAtIndex: (state, getters) => (ln, col) => state.sheet.data[(ln * getters.sheetSize) + col],
-    sheetSize: state => state.sheet.x_size * state.sheet.y_size,
+    getCellAtIndex: state => (col, line) => {
+      const x = col - 1;
+      const y = line - 1;
+      const index = (y * state.sheet.x_size) + x;
+      return state.sheet.data[index];
+    },
   },
   mutations: {
     addColumn(state, count) {
@@ -35,9 +39,10 @@ export default new Vuex.Store({
     toggleCellSelection(state, { col, line }) {
       console.log(col, line);
 
-      const sheetLength = state.sheet.x_size * state.sheet.y_size;
-      const index = (line * sheetLength) + col;
-      console.log(sheetLength, index);
+      // Need to start to 0 for index
+      const x = col - 1;
+      const y = line - 1;
+      const index = (y * state.sheet.x_size) + x;
       const cell = state.sheet.data[index] || {
         selected: false,
         value: '',
