@@ -24,14 +24,13 @@
               :col="col"
               :line="line"></SheetCell>
         </td>
-
       </tr>
     </table>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import dbclick from '../directives/DbClick';
 import SheetHeaderCell from './SheetHeaderCell.vue';
 import SheetCell from './SheetCell.vue';
@@ -45,22 +44,21 @@ export default {
   directives: {
     dbClick: dbclick,
   },
-  data: () => ({
-    sheet: {
-      x_size: 5,
-      y_size: 5,
-      data: [],
-    },
-  }),
   computed: {
     ...mapGetters(['getCellAtIndex']),
+    ...mapState({
+      sheet: state => state.sheet,
+    }),
   },
   methods: {
     onCellClick(event, col, line) {
+      const cell = this.getCellAtIndex(col, line);
       if (!event.ctrlKey) {
         this.$store.dispatch('clearSelection');
       }
-      this.$store.dispatch('toggleCellSelection', { col, line });
+      if (!cell || (cell && !cell.active)) {
+        this.$store.dispatch('toggleCellSelection', { col, line });
+      }
     },
     onCellDblClick(event, col, line) {
       this.$store.dispatch('toggleEditionMode', { col, line });
