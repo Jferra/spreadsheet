@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import Cell from './models/Cell';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -12,11 +14,14 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    getCellAtIndex: state => (col, line) => {
+    getCellAtIndex: (state, getters) => (col, line) => {
+      return state.sheet.data[getters.getIndex(col, line)];
+    },
+    getIndex: state => (col, line) => {
+      // Need to start to 0 for index
       const x = col - 1;
       const y = line - 1;
-      const index = (y * state.sheet.x_size) + x;
-      return state.sheet.data[index];
+      return (y * state.sheet.x_size) + x;
     },
   },
   mutations: {
@@ -26,44 +31,30 @@ export default new Vuex.Store({
     addLine(state, count) {
       state.sheet.y_size += count;
     },
-    updateCell(state, { col, line, content }) {
-      if (state.sheet.data[col] === undefined) state.sheet.data[col] = {};
-      if (state.sheet.data[col][line] === undefined) state.sheet.data[col][line] = {};
-      state.sheet.data[col][line].value = content;
+    updateCell(state, { getIndex, col, line, content }) {
+      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+
+      Vue.set(state.sheet.data, getIndex(col, line), {
+        ...cell,
+        value: content,
+      });
     },
     emptyCell(state, { col, line }) {
       if (state.sheet.data[col] === undefined) state.sheet.data[col] = {};
       if (state.sheet.data[col][line] === undefined) state.sheet.data[col][line] = {};
       state.sheet.data[col][line].value = '';
     },
-    toggleEditionMode(state, { col, line }) {
-      // todo this could be refactored
-      const x = col - 1;
-      const y = line - 1;
-      const index = (y * state.sheet.x_size) + x;
-      const cell = state.sheet.data[index] || {
-        selected: false,
-        active: false,
-        value: '',
-      };
-      Vue.set(state.sheet.data, index, {
+    toggleEditionMode(state, { getIndex, col, line }) {
+      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+      Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
         active: !cell.active,
       });
       console.log('edition', state.sheet.data);
     },
-    toggleCellSelection(state, { col, line }) {
-      // Need to start to 0 for index
-      // todo this could be refactored
-      const x = col - 1;
-      const y = line - 1;
-      const index = (y * state.sheet.x_size) + x;
-      const cell = state.sheet.data[index] || {
-        selected: false,
-        active: false,
-        value: '',
-      };
-      Vue.set(state.sheet.data, index, {
+    toggleCellSelection(state, { getIndex, col, line }) {
+      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+      Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
         selected: !cell.selected,
       });
@@ -77,16 +68,18 @@ export default new Vuex.Store({
       context.commit('addLine', count);
     },
     updateCell(context, { col, line, content }) {
-      context.commit('updateCell', { col, line, content });
+      context.commit('updateCell', {
+        getIndex: context.getters.getIndex, col, line, content
+      });
     },
     emptyCell(context, { col, line }) {
       context.commit('emptyCell', { col, line });
     },
     toggleEditionMode(context, { col, line }) {
-      context.commit('toggleEditionMode', { col, line });
+      context.commit('toggleEditionMode', { getIndex: context.getters.getIndex, col, line });
     },
     toggleCellSelection(context, { col, line }) {
-      context.commit('toggleCellSelection', { col, line });
+      context.commit('toggleCellSelection', { getIndex: context.getters.getIndex, col, line });
     },
   },
 });

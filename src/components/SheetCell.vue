@@ -1,5 +1,6 @@
 <template functional>
   <input
+      @blur="listeners['cellBlur']($event.target.value, props.col, props.line)"
       type="text"
       :class="{'selected': props.cell && props.cell.selected}"
       :value="props.cell && props.cell.value"
@@ -16,6 +17,14 @@ export default {
       validate: value =>
         value === null
         || (typeof value.value === 'string' && typeof value.selected === 'boolean'),
+    },
+    col: {
+      default: null,
+      validate: value => value === null || (typeof value === 'number'),
+    },
+    line: {
+      default: null,
+      validate: value => value === null || (typeof value === 'number'),
     },
   },
 };

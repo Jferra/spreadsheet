@@ -18,7 +18,11 @@
           :key="line + '-' + col"
           v-dbClick="{ dbclick: onCellDblClick, click: onCellClick, col, line }"
         >
-          <SheetCell :cell="getCellAtIndex(col, line)"></SheetCell>
+          <SheetCell
+              @cellBlur="onCellBlur"
+              :cell="getCellAtIndex(col, line)"
+              :col="col"
+              :line="line"></SheetCell>
         </td>
 
       </tr>
@@ -56,6 +60,10 @@ export default {
       this.$store.dispatch('toggleCellSelection', { col, line });
     },
     onCellDblClick(col, line) {
+      this.$store.dispatch('toggleEditionMode', { col, line });
+    },
+    onCellBlur(content, col, line) {
+      this.$store.dispatch('updateCell', { col, line, content });
       this.$store.dispatch('toggleEditionMode', { col, line });
     },
     colClick(col) {
