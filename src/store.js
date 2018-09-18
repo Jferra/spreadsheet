@@ -62,7 +62,13 @@ export default new Vuex.Store({
         ...cell,
         active: !cell.active,
       });
-      console.log('edition', state.sheet.data);
+    },
+    clearSelection(state) {
+      state.sheet.data = state.sheet.data.map((cell) => {
+        const newCell = cell;
+        if (cell.selected) newCell.selected = !cell.selected;
+        return newCell;
+      });
     },
     toggleCellSelection(state, { getIndex, col, line }) {
       const cell = state.sheet.data[getIndex(col, line)] || new Cell();
@@ -92,6 +98,9 @@ export default new Vuex.Store({
     },
     toggleEditionMode(context, { col, line }) {
       context.commit('toggleEditionMode', { getIndex: context.getters.getIndex, col, line });
+    },
+    clearSelection(context) {
+      context.commit('clearSelection');
     },
     toggleCellSelection(context, { col, line }) {
       context.commit('toggleCellSelection', { getIndex: context.getters.getIndex, col, line });

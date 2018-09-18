@@ -61,6 +61,7 @@ export default {
     },
     onCellDblClick(col, line) {
       this.$store.dispatch('toggleEditionMode', { col, line });
+      this.$store.dispatch('clearSelection');
     },
     onCellBlur(content, col, line) {
       this.$store.dispatch('updateCell', { col, line, content });
