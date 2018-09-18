@@ -1,9 +1,10 @@
 <template functional>
-  <div
+  <input
+      type="text"
       :class="{'selected': props.cell && props.cell.selected}"
-  >
-    {{ props.cell ? props.cell.value : '' }}
-  </div>
+      :value="props.cell && props.cell.value"
+      :disabled="!props.cell || !props.cell.active"
+  />
 </template>
 
 <script>

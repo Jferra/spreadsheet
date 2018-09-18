@@ -17,7 +17,7 @@ export default {
     el.addEventListener('dblclick', () => {
       clearTimeout(timer);
       prevent = true;
-      value.dbclick();
+      value.dbclick(value.col, value.line);
     });
   },
 

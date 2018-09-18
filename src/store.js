@@ -36,13 +36,31 @@ export default new Vuex.Store({
       if (state.sheet.data[col][line] === undefined) state.sheet.data[col][line] = {};
       state.sheet.data[col][line].value = '';
     },
-    toggleCellSelection(state, { col, line }) {
-      // Need to start to 0 for index
+    toggleEditionMode(state, { col, line }) {
+      // todo this could be refactored
       const x = col - 1;
       const y = line - 1;
       const index = (y * state.sheet.x_size) + x;
       const cell = state.sheet.data[index] || {
         selected: false,
+        active: false,
+        value: '',
+      };
+      Vue.set(state.sheet.data, index, {
+        ...cell,
+        active: !cell.active,
+      });
+      console.log('edition', state.sheet.data);
+    },
+    toggleCellSelection(state, { col, line }) {
+      // Need to start to 0 for index
+      // todo this could be refactored
+      const x = col - 1;
+      const y = line - 1;
+      const index = (y * state.sheet.x_size) + x;
+      const cell = state.sheet.data[index] || {
+        selected: false,
+        active: false,
         value: '',
       };
       Vue.set(state.sheet.data, index, {
@@ -63,6 +81,9 @@ export default new Vuex.Store({
     },
     emptyCell(context, { col, line }) {
       context.commit('emptyCell', { col, line });
+    },
+    toggleEditionMode(context, { col, line }) {
+      context.commit('toggleEditionMode', { col, line });
     },
     toggleCellSelection(context, { col, line }) {
       context.commit('toggleCellSelection', { col, line });

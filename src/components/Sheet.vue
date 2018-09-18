@@ -55,8 +55,8 @@ export default {
     onCellClick(col, line) {
       this.$store.dispatch('toggleCellSelection', { col, line });
     },
-    onCellDblClick() {
-      console.log('onCellDblClick');
+    onCellDblClick(col, line) {
+      this.$store.dispatch('toggleEditionMode', { col, line });
     },
     colClick(col) {
       console.log('colClick', col);
