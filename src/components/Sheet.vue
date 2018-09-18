@@ -16,7 +16,7 @@
         <td
           v-for="col in sheet.x_size"
           :key="line + '-' + col"
-          v-dbClick="{ dbclick: onCellDblClick, click: onCellClick, col, line }"
+          v-dbClick="{ dbclick: onCellDblClick, click: onCellClick, col, line, delay }"
         >
           <SheetCell
               @onCellBlur="onCellBlur"
@@ -44,6 +44,9 @@ export default {
   directives: {
     dbClick: dbclick,
   },
+  data: () => ({
+    delay: 100,
+  }),
   computed: {
     ...mapGetters(['getCellAtIndex']),
     ...mapState({
@@ -61,8 +64,11 @@ export default {
       }
     },
     onCellDblClick(event, col, line) {
-      this.$store.dispatch('toggleEditionMode', { col, line });
-      this.$store.dispatch('clearSelection');
+      this.$store.dispatch('toggleEditionMode', { col, line })
+        .then(() => {
+          this.$store.dispatch('clearSelection');
+          event.target.focus();
+        });
     },
     onCellBlur(content, col, line) {
       this.$store.dispatch('updateCell', { col, line, content });

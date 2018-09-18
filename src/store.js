@@ -97,7 +97,10 @@ export default new Vuex.Store({
       context.commit('emptySelectedCells');
     },
     toggleEditionMode(context, { col, line }) {
-      context.commit('toggleEditionMode', { getIndex: context.getters.getIndex, col, line });
+      return new Promise((resolve, reject) => {
+        context.commit('toggleEditionMode', { getIndex: context.getters.getIndex, col, line });
+        resolve();
+      });
     },
     clearSelection(context) {
       context.commit('clearSelection');
