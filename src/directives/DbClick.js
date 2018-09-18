@@ -5,19 +5,19 @@ export default {
     let prevent = false;
     const delay = value.delay || 300;
 
-    el.addEventListener('click', () => {
+    el.addEventListener('click', (event) => {
       timer = setTimeout(() => {
         if (prevent === false) {
-          value.click(value.col, value.line);
+          value.click(event, value.col, value.line);
         }
         prevent = false;
       }, delay);
     });
 
-    el.addEventListener('dblclick', () => {
+    el.addEventListener('dblclick', (event) => {
       clearTimeout(timer);
       prevent = true;
-      value.dbclick(value.col, value.line);
+      value.dbclick(event, value.col, value.line);
     });
   },
 

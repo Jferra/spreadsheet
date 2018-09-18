@@ -56,10 +56,13 @@ export default {
     ...mapGetters(['getCellAtIndex']),
   },
   methods: {
-    onCellClick(col, line) {
+    onCellClick(event, col, line) {
+      if (!event.ctrlKey) {
+        this.$store.dispatch('clearSelection');
+      }
       this.$store.dispatch('toggleCellSelection', { col, line });
     },
-    onCellDblClick(col, line) {
+    onCellDblClick(event, col, line) {
       this.$store.dispatch('toggleEditionMode', { col, line });
       this.$store.dispatch('clearSelection');
     },
