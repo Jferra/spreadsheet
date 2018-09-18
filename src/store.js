@@ -39,10 +39,22 @@ export default new Vuex.Store({
         value: content,
       });
     },
-    emptyCell(state, { col, line }) {
-      if (state.sheet.data[col] === undefined) state.sheet.data[col] = {};
-      if (state.sheet.data[col][line] === undefined) state.sheet.data[col][line] = {};
-      state.sheet.data[col][line].value = '';
+    emptyCell(state, { getIndex, col, line }) {
+      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+
+      Vue.set(state.sheet.data, getIndex(col, line), {
+        ...cell,
+        value: null,
+      });
+    },
+    emptySelectedCells(state) {
+      state.sheet.data = state.sheet.data.map((cell) => {
+        const newCell = cell;
+        if (cell.selected && (cell.value != null && cell.value.length > 0)) {
+          newCell.value = '';
+        }
+        return newCell;
+      });
     },
     toggleEditionMode(state, { getIndex, col, line }) {
       const cell = state.sheet.data[getIndex(col, line)] || new Cell();
@@ -69,11 +81,14 @@ export default new Vuex.Store({
     },
     updateCell(context, { col, line, content }) {
       context.commit('updateCell', {
-        getIndex: context.getters.getIndex, col, line, content
+        getIndex: context.getters.getIndex, col, line, content,
       });
     },
     emptyCell(context, { col, line }) {
-      context.commit('emptyCell', { col, line });
+      context.commit('emptyCell', { getIndex: context.getters.getIndex, col, line });
+    },
+    emptySelectedCells(context) {
+      context.commit('emptySelectedCells');
     },
     toggleEditionMode(context, { col, line }) {
       context.commit('toggleEditionMode', { getIndex: context.getters.getIndex, col, line });

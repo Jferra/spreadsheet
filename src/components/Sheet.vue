@@ -19,7 +19,7 @@
           v-dbClick="{ dbclick: onCellDblClick, click: onCellClick, col, line }"
         >
           <SheetCell
-              @cellBlur="onCellBlur"
+              @onCellBlur="onCellBlur"
               :cell="getCellAtIndex(col, line)"
               :col="col"
               :line="line"></SheetCell>

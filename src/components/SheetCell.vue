@@ -1,6 +1,6 @@
 <template functional>
   <input
-      @blur="listeners['cellBlur']($event.target.value, props.col, props.line)"
+      @blur="listeners['onCellBlur']($event.target.value, props.col, props.line)"
       type="text"
       :class="{'selected': props.cell && props.cell.selected}"
       :value="props.cell && props.cell.value"
@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  div {
+  input {
     width: 100%;
     height: 100%;
     border: 1px solid black;

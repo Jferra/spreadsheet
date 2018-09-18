@@ -16,6 +16,19 @@ export default {
   computed: mapState({
     sheet: state => state.sheet,
   }),
+  mounted() {
+    document.addEventListener('keyup', (event) => {
+      // console.log('keypup', event.keyCode);
+      if (event.keyCode === 46 || event.keyCode === 8) {
+        this.emptySelectedCells();
+      }
+    });
+  },
+  methods: {
+    emptySelectedCells() {
+      this.$store.dispatch('emptySelectedCells');
+    },
+  },
 };
 </script>
 
