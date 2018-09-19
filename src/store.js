@@ -1,22 +1,20 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import Cell from './models/Cell';
+import createCell from './utils/Cell';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     sheet: {
-      x_size: 5, // todo put in conf file
-      y_size: 5, // todo put in conf file
+      x_size: 50, // todo put in conf file
+      y_size: 50, // todo put in conf file
       data: [],
     },
   },
   getters: {
-    getCellAtIndex: (state, getters) => (col, line) => {
-      return state.sheet.data[getters.getIndex(col, line)];
-    },
+    getCellAtIndex: (state, getters) => (col, line) => state.sheet.data[getters.getIndex(col, line)],
     getIndex: state => (col, line) => {
       // Need to start to 0 for index
       const x = col - 1;
@@ -31,8 +29,10 @@ export default new Vuex.Store({
     addLine(state, count) {
       state.sheet.y_size += count;
     },
-    updateCell(state, { getIndex, col, line, content }) {
-      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+    updateCell(state, {
+      getIndex, col, line, content,
+    }) {
+      const cell = state.sheet.data[getIndex(col, line)] || createCell();
 
       Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
@@ -40,7 +40,7 @@ export default new Vuex.Store({
       });
     },
     emptyCell(state, { getIndex, col, line }) {
-      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+      const cell = state.sheet.data[getIndex(col, line)] || createCell();
 
       Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
@@ -57,7 +57,7 @@ export default new Vuex.Store({
       });
     },
     toggleEditionMode(state, { getIndex, col, line }) {
-      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+      const cell = state.sheet.data[getIndex(col, line)] || createCell();
       Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
         active: !cell.active,
@@ -71,7 +71,7 @@ export default new Vuex.Store({
       });
     },
     toggleCellSelection(state, { getIndex, col, line }) {
-      const cell = state.sheet.data[getIndex(col, line)] || new Cell();
+      const cell = state.sheet.data[getIndex(col, line)] || createCell();
       Vue.set(state.sheet.data, getIndex(col, line), {
         ...cell,
         selected: !cell.selected,

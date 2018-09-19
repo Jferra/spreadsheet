@@ -32,11 +32,12 @@ export default {
 
 <style scoped lang="scss">
   input {
-    width: 100%;
     height: 100%;
-    border: 1px solid black;
+    border: 1px solid grey;
     cursor: pointer;
 
-    &.selected { background: lightblue; }
+    &.selected {
+      background: rgba(20, 100, 255, 0.67);
+    }
   }
 </style>

@@ -22,7 +22,7 @@
               @onCellBlur="onCellBlur"
               :cell="getCellAtIndex(col, line)"
               :col="col"
-              :line="line"></SheetCell>
+              :line="line" />
         </td>
       </tr>
     </table>
@@ -88,8 +88,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  th, td {
-    width: 80px;
-    height: 25px;
+  table {
+    border-spacing: 0;
+
+    th, td {
+      width: 150px;
+      height: 25px;
+      padding: 0;
+      margin: 0;
+    }
   }
+
 </style>
